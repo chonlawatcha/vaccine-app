@@ -33,12 +33,6 @@ VACCINE_SCHEDULE = [
 # =========================
 # LOGIC
 # =========================
-def next_service_date(target_date):
-    for d in SERVICE_DATES:
-        if d >= target_date:
-            return d
-    return None
-
 def calculate_vaccine_schedule(birth_date_str):
     try:
         birth_date = datetime.strptime(birth_date_str, "%d-%m-%Y")
@@ -50,9 +44,14 @@ def calculate_vaccine_schedule(birth_date_str):
     md += "| ครั้งที่ | วัคซีน | วันครบกำหนด | วันรับบริการจริง |\n"
     md += "|---|---|---|---|\n"
 
-    for round_name, offset_days, vaccines in VACCINE_SCHEDULE:
+    for i, (round_name, offset_days, vaccines) in enumerate(VACCINE_SCHEDULE):
         due_date = birth_date + timedelta(days=offset_days)
-        service_date = next_service_date(due_date)
+
+        # ครั้งที่ 1: รับวัคซีนตรงวันเกิด (โรงพยาบาล)
+        if i == 0:
+            service_date = due_date
+        else:
+            service_date = next_service_date(due_date)
 
         md += (
             f"| {round_name} | {vaccines} | "
@@ -61,6 +60,7 @@ def calculate_vaccine_schedule(birth_date_str):
         )
 
     return md
+
 
 # =========================
 # GRADIO APP
