@@ -30,6 +30,14 @@ VACCINE_SCHEDULE = [
     ("ครั้งที่ 9: 4 ปี", 365*4, "OPV3, DTP5"),
 ]
 
+
+def next_service_date(target_date):
+    for d in SERVICE_DATES:
+        if d >= target_date:
+            return d
+    return None
+
+
 # =========================
 # LOGIC
 # =========================
@@ -80,6 +88,7 @@ app = gr.Interface(
 )
 
 app.launch()
+
 # =========================
 # CLOUD RUN ENTRYPOINT
 # =========================
