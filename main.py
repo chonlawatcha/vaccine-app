@@ -1,5 +1,4 @@
 import gradio as gr
-import os
 from datetime import datetime, timedelta
 
 # =========================
@@ -17,6 +16,7 @@ SERVICE_DATES = [
 ]
 
 SERVICE_DATES = [datetime.strptime(d, "%Y-%m-%d") for d in SERVICE_DATES]
+### Limitation คือเด็กที่เกิดก่อนช่วงระยะเวลาที่เรากำหนดนี้ จะไม่สามารถคำนวณวัคซีนช่วงแรกๆได้ มันจะวิ่งมาเจอวันที่ 10-10-2025 แต่ตอนใช้งานก็มาดูช่วงที่จะใช้จริงๆ ก็ยังสามารถใช้งานได้ปกติ
 
 VACCINE_SCHEDULE = [
     ("ครั้งที่ 1: แรกเกิด", 0, "BCG, HB1"),
