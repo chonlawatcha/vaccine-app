@@ -98,7 +98,3 @@ gradio_app = gr.Interface(
 # =========================
 app = FastAPI()
 app = gr.mount_gradio_app(app, gradio_app, path="/")
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))
-    uvicorn.run(app, host="0.0.0.0", port=port)
