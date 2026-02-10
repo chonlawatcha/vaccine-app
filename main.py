@@ -1,8 +1,5 @@
 import gradio as gr
-import os
 from datetime import datetime, timedelta
-from fastapi import FastAPI
-import uvicorn
 
 # =========================
 # DATA
@@ -34,9 +31,6 @@ VACCINE_SCHEDULE = [
     ("ครั้งที่ 9: 4 ปี", 1460, "OPV3, DTP5"),
 ]
 
-# =========================
-# THAI DATE FORMAT
-# =========================
 THAI_MONTHS = [
     "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
     "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
@@ -45,9 +39,6 @@ THAI_MONTHS = [
 def format_thai_date(dt):
     return f"{dt.day} {THAI_MONTHS[dt.month - 1]} {dt.year}"
 
-# =========================
-# LOGIC
-# =========================
 def next_service_date(target_date):
     for d in SERVICE_DATES:
         if d >= target_date:
@@ -77,24 +68,12 @@ def calculate_vaccine_schedule(birth_date_str):
 
     return md
 
-# =========================
-# GRADIO INTERFACE
-# =========================
-gradio_app = gr.Interface(
+demo = gr.Interface(
     fn=calculate_vaccine_schedule,
     inputs=gr.Textbox(label="วันเกิดเด็ก (DD-MM-YYYY)"),
     outputs=gr.Markdown(),
     title="🧒 คำนวณวันรับวัคซีนเด็ก",
-    description="""
-<p align="center">
-  <img src="/file=logo.png" width="180"><br>
-  <b>ศูนย์บริการ รพสต.บ้านใหม่ ปากเกร็ด</b><br>
-  จัดทำโดย นักศึกษาสาธารณสุขชุมชน มสธ.
-</p>
-"""
+)
 
-# =========================
-# FASTAPI + CLOUD RUN
-# =========================
-app = FastAPI()
-app = gr.mount_gradio_app(app, gradio_app, path="/")
+# ⭐ สำคัญ: expose ASGI app
+app = demo.app
